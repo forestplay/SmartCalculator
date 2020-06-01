@@ -1,0 +1,82 @@
+type: edu
+custom_name: stage3
+files:
+- name: test/Test.java
+  visible: true
+  text: |
+    import calculator.Main;
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.SimpleTestCase;
+
+    import java.util.List;
+
+    public class Test extends StageTest {
+
+        public Test() {
+            super(Main.class);
+        }
+
+        @Override
+        public List<SimpleTestCase> generate() {
+            return List.of(
+                    new SimpleTestCase(
+                            "/exit",
+                            "Bye!"
+                    ),
+                    new SimpleTestCase(
+                            "17 9\n-2 5\n\n7\n/exit",
+                            "26\n3\n7\nBye!"
+                    ),
+                    new SimpleTestCase(
+                            "100 200\n500\n300 400\n200\n\n\n-500\n/exit",
+                            "300\n500\n700\n200\n-500\nBye!"
+                    ),
+                    new SimpleTestCase(
+                            "801 199 -300 500\n10 20 30 40 50 -10 -20 -30 -40\n/exit",
+                            "1200\n50\nBye!"
+                    )
+            );
+        }
+
+    }
+  learner_created: false
+- name: src/calculator/Main.java
+  visible: true
+  text: |
+    package calculator;
+
+    import java.util.Scanner;
+
+    public class Main {
+
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+
+            while (true) {
+                int n1;
+                int n2;
+
+                String input = scanner.nextLine().trim();
+
+                if (input.equals("/exit")) {
+                    System.out.println("Bye!");
+                    break;
+                }
+                if (input.isEmpty()) continue;
+
+                String[] values = input.split(" ");
+                n1 = Integer.parseInt(values[0]);
+
+                if (values.length > 1) {
+                    n2 = Integer.parseInt(values[1]);
+                    System.out.println(n1 + n2);
+                } else {
+                    System.out.println(n1);
+                }
+            }
+        }
+    }
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/42/stages/222/implement
+status: Solved
+record: 3

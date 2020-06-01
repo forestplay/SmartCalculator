@@ -1,0 +1,97 @@
+type: edu
+custom_name: stage5
+files:
+- name: test/Test.java
+  visible: true
+  text: |
+    import calculator.Main;
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.SimpleTestCase;
+
+    import java.util.List;
+
+    public class Test extends StageTest {
+
+        public Test() {
+            super(Main.class);
+        }
+
+        @Override
+        public List<SimpleTestCase> generate() {
+            return List.of(
+                    new SimpleTestCase(
+                            "100 + 200 - 300\n/exit",
+                            "0\nBye!"
+                    ),
+                    new SimpleTestCase(
+                            "4 + 6 - 8\n\n\n2 - 3 - 4\n\n8 + 7 - 4\n/exit",
+                            "2\n-5\n11\nBye!"
+                    ),
+                    new SimpleTestCase(
+                            "abc\n123+\n+15\n18 22\n\n-22\n22-\n/exit",
+                            "Invalid expression\n" +
+                                    "Invalid expression\n" +
+                                    "15\n" +
+                                    "Invalid expression\n" +
+                                    "-22\n" +
+                                    "Invalid expression\n" +
+                                    "Bye!"
+                    ),
+                    new SimpleTestCase(
+                            "/go\n/exit",
+                            "Unknown command\nBye!"
+                    )
+            );
+        }
+    }
+  learner_created: false
+- name: src/calculator/Main.java
+  visible: true
+  text: |
+    package calculator;
+
+    import java.util.Scanner;
+
+    public class Main {
+
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+
+            while (true) {
+                int sum = 0;
+
+                String input = scanner.nextLine().trim();
+
+                if (input.isEmpty()) continue;
+                if (input.equals("/exit")) {
+                    System.out.println("Bye!");
+                    break;
+                }
+                if (input.equals("/help")) {
+                    System.out.println("The program calculates the sum of numbers");
+                    continue;
+                }
+
+                input = input
+                        .replaceAll("-[ ]*(-[ ]*-[ ]*)*", " -")     // replace odd number of '-' with just one pushed to next operand
+                        .replaceAll("-[ ]*-", " ")                  // remove even number of '-'
+                        .replaceAll("\\+([ ]*\\+)*", " ")           // remove '+' operator, it's the default operation
+                        .trim()                                                     // remove leading/lagging whitespace
+                        .replaceAll("[ \t]+", " ")                  // remove repeating whitespace
+                ;
+
+
+                String[] values = input.split(" ");
+
+                for (int x = 0; x < values.length; x++) {
+                    sum += Integer.parseInt(values[x]);
+                }
+                System.out.println(sum);
+            }
+
+        }
+    }
+  learner_created: true
+feedback_link: https://hyperskill.org/projects/42/stages/224/implement
+status: Solved
+record: 5

@@ -1,0 +1,115 @@
+type: edu
+custom_name: stage1
+files:
+- name: src/calculator/Main.java
+  visible: true
+  text: |
+    package calculator;
+
+    import java.util.Scanner;
+
+    public class Main {
+
+        public static void main(String[] args) {
+            Scanner scanner = new Scanner(System.in);
+            // put your code here
+        }
+    }
+  learner_created: false
+- name: test/Test.java
+  visible: false
+  text: |
+    import calculator.Main;
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testcase.TestCase;
+    import org.hyperskill.hstest.testing.TestedProgram;
+
+    import static org.hyperskill.hstest.testing.expect.Expectation.expect;
+
+    import java.util.Arrays;
+    import java.util.List;
+
+    public class Test extends StageTest<String> {
+
+        @Override
+        public List<TestCase<String>> generate() {
+            return Arrays.asList(
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // base test 1
+                        main.start();
+
+                        String output = main.execute("0 1");
+                        expect(output).toContain(1).integersOnly();
+                        if (!output.equals("1\n"))
+                            return CheckResult.wrong("Your program cannot sum two positive single digits");
+
+                        return CheckResult.correct();
+                    }),
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // base test 2
+                        main.start();
+
+                        String output = main.execute("1 0");
+                        if (!output.equals("1\n"))
+                            return CheckResult.wrong("Your program cannot sum two positive single digits");
+
+                        return CheckResult.correct();
+                    }),
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // positive with positive simple
+                        main.start();
+
+                        String output = main.execute("5 7");
+                        if (!output.equals("12\n"))
+                            return CheckResult.wrong("Your program cannot sum two positive single digits");
+
+                        return CheckResult.correct();
+                    }),
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // sum of three-digit numbers
+                        main.start();
+
+                        String output = main.execute("100 123");
+                        if (!output.equals("223\n"))
+                            return CheckResult.wrong("Your program cannot sum two three-digit numbers");
+
+                        return CheckResult.correct();
+                    }),
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // sum of positive and negative number
+                        main.start();
+
+                        String output = main.execute("-1 5");
+                        if (!output.equals("4\n"))
+                            return CheckResult.wrong("Your program cannot sum positive and negative numbers");
+
+                        return CheckResult.correct();
+                    }),
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // sum of positive and negative number
+                        main.start();
+
+                        String output = main.execute("5 -2");
+                        if (!output.equals("3\n"))
+                            return CheckResult.wrong("Your program cannot sum positive and negative numbers");
+
+                        return CheckResult.correct();
+                    }),
+                    new TestCase<String>().setDynamicTesting(() -> {
+                        TestedProgram main = new TestedProgram(Main.class); // sum of two negative numbers
+                        main.start();
+
+                        String output = main.execute("-300 -400");
+                        if (!output.equals("-700\n"))
+                            return CheckResult.wrong("Your program cannot sum two negative numbers");
+
+                        return CheckResult.correct();
+                    })
+            );
+        }
+    }
+  learner_created: false
+feedback_link: https://hyperskill.org/projects/42/stages/220/implement
+status: Solved
+record: 1
