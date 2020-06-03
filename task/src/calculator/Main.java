@@ -1,5 +1,6 @@
 package calculator;
 
+import java.math.BigInteger;
 import java.util.*;
 
 public class Main {
@@ -10,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Map<String, Integer> varMap = new HashMap<>();
+        Map<String, BigInteger> varMap = new HashMap<>();
 
         while (true) {
             String input = scanner.nextLine().trim();
@@ -148,7 +149,7 @@ public class Main {
             throw new Exception("Invalid expression");
     }
 
-    private static String replaceVars(String input, Map<String, Integer> varMap) throws Exception {
+    private static String replaceVars(String input, Map<String, BigInteger> varMap) throws Exception {
         ArrayList<String> values = new ArrayList<String>(Arrays.asList(input.split(" ")));
         StringBuilder newInput = new StringBuilder("");
 
@@ -183,7 +184,7 @@ public class Main {
         return exitStatus;
     }
 
-    private static Integer processExpression(String input, Map<String, Integer> varMap) throws Exception {
+    private static BigInteger processExpression(String input, Map<String, BigInteger> varMap) throws Exception {
         input = replaceVars(input, varMap);
         ArrayList<String> values = new ArrayList<String>(Arrays.asList(input.split(" ")));
 
@@ -230,25 +231,25 @@ public class Main {
             if (thing.trim().matches("\\d+")) {
                 stack.push(thing);
             } else if (thing.matches("[\\+\\-\\*/]")) {
-                int operand2 = Integer.valueOf(stack.pop());
-                int operand1 = Integer.valueOf(stack.pop());
+                BigInteger operand2 = new BigInteger(stack.pop());
+                BigInteger operand1 = new BigInteger(stack.pop());
                 switch (thing) {
                     case "+":
-                        stack.push(Integer.toString(operand1 + operand2));
+                        stack.push(operand1.add(operand2).toString());
                         break;
                     case "-":
-                        stack.push(Integer.toString(operand1 - operand2));
+                        stack.push(operand1.subtract(operand2).toString());
                         break;
                     case "*":
-                        stack.push(Integer.toString(operand1 * operand2));
+                        stack.push(operand1.multiply(operand2).toString());
                         break;
                     case "/":
-                        stack.push(Integer.toString(operand1 / operand2));
+                        stack.push(operand1.divide(operand2).toString());
                         break;
                 }
             }
         }
-        return Integer.valueOf(stack.peek());
+        return new BigInteger(stack.peek());
     }
 
     private static int precedence(String ch) {
@@ -263,7 +264,7 @@ public class Main {
         }
     }
 
-    private static void processAssignment(String input, Map<String, Integer> varMap) throws Exception {
+    private static void processAssignment(String input, Map<String, BigInteger> varMap) throws Exception {
         ArrayList<String> values = new ArrayList<String>(Arrays.asList(input.split("=")));
         String varName = values.get(0).trim();
         varMap.put(varName, processExpression(values.get(1).trim(), varMap));
